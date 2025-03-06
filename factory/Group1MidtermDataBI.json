@@ -1,0 +1,9 @@
+{
+	"name": "Group1MidtermDataBI",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "98af163c-b088-46b2-99ea-3b42245e53ab",
+		"tenantId": "a8eec281-aaa3-4dae-ac9b-9a398b9215e7"
+	}
+}
