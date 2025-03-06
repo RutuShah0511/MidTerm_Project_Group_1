@@ -1,0 +1,9 @@
+{
+	"name": "Group1Midterm",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "69a92eb8-bc10-4c50-a6ac-0ef6596e346c",
+		"tenantId": "a8eec281-aaa3-4dae-ac9b-9a398b9215e7"
+	}
+}
