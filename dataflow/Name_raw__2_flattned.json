@@ -12,7 +12,15 @@
 					"name": "NameRaw"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText3",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "ModifyColumns1",
@@ -39,10 +47,8 @@
 				"     ignoreNoFilesFound: false) ~> NameRaw",
 				"NameRaw derive(primaryProfession = toString(primaryProfession),",
 				"          knownForTitles = toString(knownForTitles)) ~> ModifyColumns1",
-				"ModifyColumns1 derive(primaryProfession = split(replace(replace(replace(primaryProfession, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\")",
-				",",
-				"          knownForTitles = split(replace(replace(replace(knownForTitles, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\")",
-				") ~> derivedColumn1",
+				"ModifyColumns1 derive(primaryProfession = split(replace(replace(replace(primaryProfession, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\"),",
+				"          knownForTitles = split(replace(replace(replace(knownForTitles, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\")) ~> derivedColumn1",
 				"derivedColumn1 foldDown(unrollMultiple(primaryProfession,knownForTitles),",
 				"     mapColumn(",
 				"          nconst,",
@@ -53,7 +59,14 @@
 				"          knownForTitles",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1"
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
