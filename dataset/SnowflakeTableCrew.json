@@ -1,0 +1,29 @@
+{
+	"name": "SnowflakeTableCrew",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DIRECTOR_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "WRITER_ID",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "IMDB_SCHEMA",
+			"table": "Crew_Raw_2_Flattened"
+		}
+	}
+}
