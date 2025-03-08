@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "Name_raw_flattened"
+			"table": "NAME_RAW_FLATTENED"
 		}
 	}
 }
