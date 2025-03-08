@@ -1,0 +1,9 @@
+{
+	"name": "RutuShahGroup1MidTerm",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f21d330b-1e7e-4f48-a136-72f04c8e795d",
+		"tenantId": "a8eec281-aaa3-4dae-ac9b-9a398b9215e7"
+	}
+}

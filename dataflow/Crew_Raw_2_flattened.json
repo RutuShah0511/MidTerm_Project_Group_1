@@ -1,0 +1,79 @@
+{
+	"name": "Crew_Raw_2_flattened",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText7",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTableCrew",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          tconst as string,",
+				"          directors as string,",
+				"          writers as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(directors = toString(directors),",
+				"          writers = toString(writers)) ~> derivedColumn1",
+				"derivedColumn1 derive(directors = split(replace(replace(replace(directors, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\"),",
+				"          writers = split(replace(replace(replace(writers, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\")) ~> derivedColumn2",
+				"derivedColumn2 foldDown(unrollMultiple(directors,writers),",
+				"     mapColumn(",
+				"          tconst,",
+				"          directors,",
+				"          writers",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          TCONST as string,",
+				"          DIRECTOR_ID as string,",
+				"          WRITER_ID as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          TCONST = tconst,",
+				"          DIRECTOR_ID = directors,",
+				"          WRITER_ID = writers",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
