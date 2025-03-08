@@ -1,0 +1,90 @@
+{
+	"name": "Title_Basics_Raw_2_Flattened",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText6",
+						"type": "DatasetReference"
+					},
+					"name": "TitleBasicsRaw"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          tconst as string,",
+				"          titleType as string,",
+				"          primaryTitle as string,",
+				"          originalTitle as string,",
+				"          isAdult as boolean,",
+				"          startYear as short,",
+				"          endYear as short,",
+				"          runtimeMinutes as short,",
+				"          genres as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> TitleBasicsRaw",
+				"TitleBasicsRaw derive(genres = toString(genres)) ~> derivedColumn1",
+				"derivedColumn1 derive(genres = split(replace(replace(replace(genres, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\")) ~> derivedColumn2",
+				"derivedColumn2 foldDown(unroll(genres),",
+				"     mapColumn(",
+				"          tconst,",
+				"          titleType,",
+				"          primaryTitle,",
+				"          originalTitle,",
+				"          isAdult,",
+				"          startYear,",
+				"          endYear,",
+				"          runtimeMinutes,",
+				"          genres",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          TCONST as string,",
+				"          TITLETYPE as string,",
+				"          PRIMARYTITLE as string,",
+				"          ORIGINALTITLE as string,",
+				"          ISADULT as boolean,",
+				"          STARTYEAR as decimal(38,0),",
+				"          ENDYEAR as decimal(38,0),",
+				"          RUNTIMEMINUTES as decimal(38,0),",
+				"          GENRES as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true) ~> sink1"
+			]
+		}
+	}
+}
