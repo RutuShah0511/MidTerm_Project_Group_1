@@ -2,7 +2,7 @@
 	"name": "SnowflakeTable17",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Snowflake_name_flatenned",
+			"referenceName": "SnowflakeiMDB",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -55,7 +55,7 @@
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "DIM_TITLE"
+			"table": "FACT_EPISODES"
 		}
 	}
 }
