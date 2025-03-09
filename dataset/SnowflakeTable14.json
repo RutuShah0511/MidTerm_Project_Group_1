@@ -1,0 +1,16 @@
+{
+	"name": "SnowflakeTable14",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeiMDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": "IMDB_SCHEMA",
+			"table": "TITLE_RAW_FLATTENED"
+		}
+	}
+}
