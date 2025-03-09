@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "DelimitedText12",
+						"referenceName": "DelimitedText16",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable18",
+						"referenceName": "SnowflakeTable24",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -33,7 +33,7 @@
 					"name": "join1"
 				},
 				{
-					"name": "surrogateKey1"
+					"name": "surrogateKey2"
 				}
 			],
 			"scriptLines": [
@@ -67,8 +67,8 @@
 				"     broadcast: 'auto')~> join1",
 				"join1 keyGenerate(output(EpisodeKey as long),",
 				"     startAt: 1L,",
-				"     stepValue: 1L) ~> surrogateKey1",
-				"surrogateKey1 sink(allowSchemaDrift: true,",
+				"     stepValue: 1L) ~> surrogateKey2",
+				"surrogateKey2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          EPISODEKEY as decimal(10,0),",
