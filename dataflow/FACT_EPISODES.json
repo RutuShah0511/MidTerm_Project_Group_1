@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "DelimitedText16",
+						"referenceName": "Parquet_Episodes",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -54,12 +54,13 @@
 				"source(output(",
 				"          tconst as string,",
 				"          parentTconst as string,",
-				"          seasonNumber as string,",
-				"          episodeNumber as string",
+				"          seasonNumber as integer,",
+				"          episodeNumber as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source2",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> source2",
 				"source1, source2 join(1==1,",
 				"     joinType:'cross',",
 				"     matchType:'exact',",
