@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText13",
+	"name": "DelimitedText20",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage3",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Clean_Title_Episodes.csv",
+				"fileName": "Clean_Title_Principal.parquet",
 				"fileSystem": "bronze"
 			},
 			"columnDelimiter": ",",
@@ -24,15 +24,23 @@
 				"type": "String"
 			},
 			{
-				"name": "parentTconst",
+				"name": "ordering",
 				"type": "String"
 			},
 			{
-				"name": "seasonNumber",
+				"name": "nconst",
 				"type": "String"
 			},
 			{
-				"name": "episodeNumber",
+				"name": "category",
+				"type": "String"
+			},
+			{
+				"name": "job",
+				"type": "String"
+			},
+			{
+				"name": "characters",
 				"type": "String"
 			}
 		]

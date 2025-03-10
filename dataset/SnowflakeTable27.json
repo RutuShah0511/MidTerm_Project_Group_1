@@ -1,5 +1,5 @@
 {
-	"name": "SnowflakeTable19",
+	"name": "SnowflakeTable27",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "SnowflakeiMDB",
@@ -9,25 +9,45 @@
 		"type": "SnowflakeV2Table",
 		"schema": [
 			{
-				"name": "EPISODEKEY",
-				"type": "NUMBER",
-				"precision": 10,
-				"scale": 0
-			},
-			{
 				"name": "TITLEKEY",
 				"type": "NUMBER",
 				"precision": 10,
 				"scale": 0
 			},
 			{
-				"name": "SEASONNUMBER",
+				"name": "TCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "TITLETYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PRIMARYTITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ORIGINALTITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ISADULT",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "STARTYEAR",
 				"type": "NUMBER",
 				"precision": 38,
 				"scale": 0
 			},
 			{
-				"name": "EPISODENUMBER",
+				"name": "ENDYEAR",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "RUNTIMEMINUTES",
 				"type": "NUMBER",
 				"precision": 38,
 				"scale": 0
@@ -35,7 +55,7 @@
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "FACT_EPISODES"
+			"table": "DIM_TITLE"
 		}
 	}
 }

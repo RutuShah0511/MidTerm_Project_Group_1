@@ -1,5 +1,5 @@
 {
-	"name": "SnowflakeTable19",
+	"name": "SnowflakeTable24",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "SnowflakeiMDB",
