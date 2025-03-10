@@ -34,6 +34,9 @@
 				},
 				{
 					"name": "surrogateKey2"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -61,7 +64,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> source2",
-				"source1, source2 join(1==1,",
+				"filter1, source2 join(1==1,",
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
@@ -69,6 +72,8 @@
 				"join1 keyGenerate(output(EpisodeKey as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey2",
+				"source1 filter(TITLEKEY <= 13655500",
+				") ~> filter1",
 				"surrogateKey2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
