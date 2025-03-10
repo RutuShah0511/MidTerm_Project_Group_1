@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable_Name_Flattned",
+						"referenceName": "Parquet5",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -63,14 +63,20 @@
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
 				"flatten1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
+				"     input(",
+				"          nconst as string,",
+				"          primaryName as string,",
+				"          birthYear as integer,",
+				"          deathYear as integer,",
+				"          primaryProfession as string,",
+				"          knownForTitles as string",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     stageInsert: true,",
 				"     mapColumn(",
 				"          nconst,",
 				"          primaryName,",

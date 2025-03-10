@@ -6,14 +6,14 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable19",
+						"referenceName": "Parquet5",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
 				},
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable20",
+						"referenceName": "Parquet7",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -26,44 +26,53 @@
 					"name": "source3"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "join1"
 				},
 				{
 					"name": "join2"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "surrogateKey1"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          NAMEKEY as decimal(10,0),",
-				"          NCONST as string,",
-				"          PRIMARYNAME as string,",
-				"          BIRTHYEAR as decimal(38,0),",
-				"          DEATHYEAR as decimal(38,0),",
-				"          KNOWNFORTITLES as string,",
-				"          STARTDATE as decimal(38,0),",
-				"          ENDDATE as decimal(38,0),",
-				"          ISCURRENT as decimal(38,0)",
+				"          nconst as string,",
+				"          primaryName as string,",
+				"          birthYear as integer,",
+				"          deathYear as integer,",
+				"          primaryProfession as string,",
+				"          knownForTitles as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'table') ~> source1",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> source1",
 				"source(output(",
-				"          TITLEKEY as decimal(10,0),",
-				"          TCONST as string,",
-				"          TITLETYPE as string,",
-				"          PRIMARYTITLE as string,",
-				"          ORIGINALTITLE as string,",
-				"          ISADULT as boolean,",
-				"          STARTYEAR as decimal(38,0),",
-				"          ENDYEAR as decimal(38,0),",
-				"          RUNTIMEMINUTES as decimal(38,0)",
+				"          tconst as string,",
+				"          titleType as string,",
+				"          primaryTitle as string,",
+				"          originalTitle as string,",
+				"          isAdult as integer,",
+				"          startYear as string,",
+				"          endYear as string,",
+				"          runtimeMinutes as short,",
+				"          genres as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'table') ~> source2",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> source2",
 				"source(output(",
 				"          tconst as string,",
 				"          ordering as long,",
@@ -85,7 +94,39 @@
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join2"
+				"     broadcast: 'auto')~> join2",
+				"join2 select(mapColumn(",
+				"          nconst = source1@nconst,",
+				"          primaryName,",
+				"          birthYear,",
+				"          deathYear,",
+				"          primaryProfession,",
+				"          knownForTitles,",
+				"          tconst = source2@tconst,",
+				"          titleType,",
+				"          primaryTitle,",
+				"          originalTitle,",
+				"          isAdult,",
+				"          startYear,",
+				"          endYear,",
+				"          runtimeMinutes,",
+				"          genres,",
+				"          tconst = source3@tconst,",
+				"          ordering,",
+				"          nconst = source3@nconst,",
+				"          category,",
+				"          job,",
+				"          characters",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 keyGenerate(output(PrincipalKey as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}

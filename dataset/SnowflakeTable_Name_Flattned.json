@@ -2,15 +2,11 @@
 	"name": "SnowflakeTable_Name_Flattned",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Snowflake_name_flatenned",
+			"referenceName": "Snowflake1",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "SnowflakeV2Table",
-		"schema": [],
-		"typeProperties": {
-			"schema": "IMDB_SCHEMA",
-			"table": "NAME_RAW_FLATTENED"
-		}
+		"schema": []
 	}
 }
