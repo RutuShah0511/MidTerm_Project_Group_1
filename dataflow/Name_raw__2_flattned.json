@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText2",
+						"referenceName": "Parquet4",
 						"type": "DatasetReference"
 					},
 					"name": "NameRaw"
@@ -44,7 +44,8 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> NameRaw",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> NameRaw",
 				"NameRaw derive(primaryProfession = toString(primaryProfession),",
 				"          knownForTitles = toString(knownForTitles)) ~> ModifyColumns1",
 				"ModifyColumns1 derive(primaryProfession = split(replace(replace(replace(primaryProfession, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\"),",
