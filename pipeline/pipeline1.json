@@ -185,7 +185,7 @@
 				}
 			},
 			{
-				"name": "Title_DF",
+				"name": "Data flow8",
 				"type": "ExecuteDataFlow",
 				"state": "Inactive",
 				"onInactiveMarkAs": "Succeeded",
@@ -237,7 +237,7 @@
 				}
 			},
 			{
-				"name": "Fact_Episode",
+				"name": "Data flow10",
 				"type": "ExecuteDataFlow",
 				"state": "Inactive",
 				"onInactiveMarkAs": "Succeeded",
@@ -263,8 +263,10 @@
 				}
 			},
 			{
-				"name": "Fact_Principal",
+				"name": "Data flow11",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -280,225 +282,15 @@
 						"type": "DataFlowReference"
 					},
 					"compute": {
-						"coreCount": 32,
-						"computeType": "MemoryOptimized"
+						"coreCount": 8,
+						"computeType": "General"
 					},
 					"traceLevel": "Fine"
 				}
 			},
 			{
-				"name": "toStage",
-				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.00:30:00",
-					"retry": 1,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "ParquetSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": false,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "ParquetReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SnowflakeV2Sink",
-						"importSettings": {
-							"type": "SnowflakeImportCopyCommand"
-						}
-					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "linkedService2",
-							"type": "LinkedServiceReference"
-						},
-						"path": "silver"
-					},
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "tconst",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TCONST",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ordering",
-									"type": "Int64"
-								},
-								"sink": {
-									"name": "ORDERING",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"name": "nconst",
-									"type": "String"
-								},
-								"sink": {
-									"name": "NCONST",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "category",
-									"type": "String"
-								},
-								"sink": {
-									"name": "CATEGORY",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "job",
-									"type": "String"
-								},
-								"sink": {
-									"name": "JOB",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "characters",
-									"type": "String"
-								},
-								"sink": {
-									"name": "CHARACTERS",
-									"type": "String"
-								}
-							}
-						]
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "Parquet3",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "SnowflakeTable29",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
-				"name": "Copy data1",
-				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "ParquetSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "ParquetReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SnowflakeV2Sink",
-						"importSettings": {
-							"type": "SnowflakeImportCopyCommand"
-						}
-					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "linkedService2",
-							"type": "LinkedServiceReference"
-						},
-						"path": "silver"
-					},
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "tconst",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TCONST",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "averageRating",
-									"type": "Single"
-								},
-								"sink": {
-									"name": "AVERAGERATING",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"name": "numVotes",
-									"type": "Int32"
-								},
-								"sink": {
-									"name": "NUMVOTES",
-									"type": "Int64"
-								}
-							}
-						]
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "Parquet4",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "SnowflakeTable_Ratings",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
-				"name": "FACT_RATING",
+				"name": "Data flow12",
 				"type": "ExecuteDataFlow",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -510,7 +302,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "FACT_RATING",
+						"referenceName": "dim_profession",
 						"type": "DataFlowReference"
 					},
 					"compute": {
@@ -519,145 +311,6 @@
 					},
 					"traceLevel": "Fine"
 				}
-			},
-			{
-				"name": "Stage_Akas",
-				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "ParquetSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "ParquetReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SnowflakeV2Sink",
-						"importSettings": {
-							"type": "SnowflakeImportCopyCommand"
-						}
-					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "linkedService2",
-							"type": "LinkedServiceReference"
-						},
-						"path": "silver"
-					},
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "titleId",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TITLEID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ordering",
-									"type": "Int64"
-								},
-								"sink": {
-									"name": "ORDERING",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"name": "title",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TITLE",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "region",
-									"type": "String"
-								},
-								"sink": {
-									"name": "REGION",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "language",
-									"type": "String"
-								},
-								"sink": {
-									"name": "LANGUAGE",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "types",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TYPES",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "attributes",
-									"type": "String"
-								},
-								"sink": {
-									"name": "ATTRIBUTES",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "isOriginalTitle",
-									"type": "Int32"
-								},
-								"sink": {
-									"name": "ISORIGINALTITLE",
-									"type": "Boolean"
-								}
-							}
-						]
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "Parquet5",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "SnowflakeTable35",
-						"type": "DatasetReference"
-					}
-				]
 			}
 		],
 		"annotations": []

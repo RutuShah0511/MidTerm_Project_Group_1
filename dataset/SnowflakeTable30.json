@@ -9,45 +9,37 @@
 		"type": "SnowflakeV2Table",
 		"schema": [
 			{
-				"name": "PRINCIPALKEY",
-				"type": "NUMBER",
-				"precision": 10,
-				"scale": 0
+				"name": "nconst",
+				"type": "VARCHAR"
 			},
 			{
-				"name": "NAMEKEY",
-				"type": "NUMBER",
-				"precision": 10,
-				"scale": 0
+				"name": "primaryName",
+				"type": "VARCHAR"
 			},
 			{
-				"name": "TITLEKEY",
-				"type": "NUMBER",
-				"precision": 10,
-				"scale": 0
-			},
-			{
-				"name": "ORDERING",
+				"name": "birthYear",
 				"type": "NUMBER",
 				"precision": 38,
 				"scale": 0
 			},
 			{
-				"name": "CATEGORY",
+				"name": "deathYear",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "Profession",
 				"type": "VARCHAR"
 			},
 			{
-				"name": "JOB",
-				"type": "VARCHAR"
-			},
-			{
-				"name": "CHARACTERS",
+				"name": "knownForTitles",
 				"type": "VARCHAR"
 			}
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "FACT_PRINCIPALS"
+			"table": "NAME_RAW_FLATTENED"
 		}
 	}
 }

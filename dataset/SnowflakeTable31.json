@@ -9,29 +9,37 @@
 		"type": "SnowflakeV2Table",
 		"schema": [
 			{
-				"name": "TCONST",
+				"name": "nconst",
 				"type": "VARCHAR"
 			},
 			{
-				"name": "PARENTTCONST",
+				"name": "primaryName",
 				"type": "VARCHAR"
 			},
 			{
-				"name": "SEASONNUMBER",
+				"name": "birthYear",
 				"type": "NUMBER",
 				"precision": 38,
 				"scale": 0
 			},
 			{
-				"name": "EPISODENUMBER",
+				"name": "deathYear",
 				"type": "NUMBER",
 				"precision": 38,
 				"scale": 0
+			},
+			{
+				"name": "Profession",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "knownForTitles",
+				"type": "VARCHAR"
 			}
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "RAW_EPISODE"
+			"table": "NAME_RAW_FLATTENED"
 		}
 	}
 }

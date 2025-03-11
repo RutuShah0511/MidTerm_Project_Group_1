@@ -2,7 +2,7 @@
 	"name": "Parquet3",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage4",
+			"referenceName": "AzureDataLakeStorage3",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,34 +10,34 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Clean_Title_Principal.parquet",
+				"fileName": "name_new_basics.parquet",
 				"fileSystem": "bronze"
 			},
 			"compressionCodec": "snappy"
 		},
 		"schema": [
 			{
-				"name": "tconst",
-				"type": "UTF8"
-			},
-			{
-				"name": "ordering",
-				"type": "INT64"
-			},
-			{
 				"name": "nconst",
 				"type": "UTF8"
 			},
 			{
-				"name": "category",
+				"name": "primaryName",
 				"type": "UTF8"
 			},
 			{
-				"name": "job",
+				"name": "birthYear",
+				"type": "INT32"
+			},
+			{
+				"name": "deathYear",
+				"type": "INT32"
+			},
+			{
+				"name": "primaryProfession",
 				"type": "UTF8"
 			},
 			{
-				"name": "characters",
+				"name": "knownForTitles",
 				"type": "UTF8"
 			}
 		]

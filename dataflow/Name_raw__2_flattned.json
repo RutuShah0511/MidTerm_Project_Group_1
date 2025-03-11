@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText2",
+						"referenceName": "Parquet3",
 						"type": "DatasetReference"
 					},
 					"name": "NameRaw"
@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable_Name_Flattned",
+						"referenceName": "SnowflakeTable30",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -44,12 +44,13 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> NameRaw",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> NameRaw",
 				"NameRaw derive(primaryProfession = toString(primaryProfession),",
 				"          knownForTitles = toString(knownForTitles)) ~> ModifyColumns1",
 				"ModifyColumns1 derive(primaryProfession = split(replace(replace(replace(primaryProfession, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\"),",
 				"          knownForTitles = split(replace(replace(replace(knownForTitles, \"[\", \"\"), \"]\", \"\"), \"\\\"\", \"\"), \",\")) ~> derivedColumn1",
-				"derivedColumn1 foldDown(unrollMultiple(primaryProfession,knownForTitles),",
+				"derivedColumn1 foldDown(unroll(primaryProfession),",
 				"     mapColumn(",
 				"          nconst,",
 				"          primaryName,",
@@ -62,6 +63,14 @@
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
 				"flatten1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          nconst as string,",
+				"          primaryName as string,",
+				"          birthYear as decimal(38,0),",
+				"          deathYear as decimal(38,0),",
+				"          Profession as string,",
+				"          knownForTitles as string",
+				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
