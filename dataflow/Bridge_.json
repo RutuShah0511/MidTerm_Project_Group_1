@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable38",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
 				}
 			],
 			"sinks": [],
@@ -42,7 +49,17 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'table') ~> source2"
+				"     format: 'table') ~> source2",
+				"source(output(",
+				"          LANGUAGEKEY as decimal(10,0),",
+				"          LANGUAGECODE as string,",
+				"          LANGUAGEDESCRIPTION as string,",
+				"          SCOPE as string,",
+				"          TYPE as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> source3"
 			]
 		}
 	}
