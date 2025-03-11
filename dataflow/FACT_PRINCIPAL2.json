@@ -1,0 +1,184 @@
+{
+	"name": "FACT_PRINCIPAL2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable26",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable27",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable42",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable29",
+						"type": "DatasetReference"
+					},
+					"name": "source4"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable40",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          NAMEKEY as decimal(10,0),",
+				"          NCONST as string,",
+				"          PRIMARYNAME as string,",
+				"          BIRTHYEAR as decimal(38,0),",
+				"          DEATHYEAR as decimal(38,0),",
+				"          KNOWNFORTITLES as string,",
+				"          STARTDATE as decimal(38,0),",
+				"          ENDDATE as decimal(38,0),",
+				"          ISCURRENT as decimal(38,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> source1",
+				"source(output(",
+				"          TITLEKEY as decimal(10,0),",
+				"          TCONST as string,",
+				"          TITLETYPE as string,",
+				"          PRIMARYTITLE as string,",
+				"          ORIGINALTITLE as string,",
+				"          ISADULT as boolean,",
+				"          STARTYEAR as decimal(38,0),",
+				"          ENDYEAR as decimal(38,0),",
+				"          RUNTIMEMINUTES as decimal(38,0),",
+				"          GENRES as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> source2",
+				"source(output(",
+				"          TCONST as string,",
+				"          TITLETYPE as string,",
+				"          PRIMARYTITLE as string,",
+				"          ORIGINALTITLE as string,",
+				"          ISADULT as boolean,",
+				"          STARTYEAR as decimal(38,0),",
+				"          ENDYEAR as decimal(38,0),",
+				"          RUNTIMEMINUTES as decimal(38,0),",
+				"          GENRES as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> source3",
+				"source(output(",
+				"          PROFESSIONKEY as decimal(38,0),",
+				"          PROFESSIONNAME as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> source4",
+				"source1, source2 join(KNOWNFORTITLES == TCONST,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, source3 join(source2@TCONST == source3@TCONST,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"select1 keyGenerate(output(Prinipal_key as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"join2 select(mapColumn(",
+				"          NAMEKEY,",
+				"          NCONST,",
+				"          PRIMARYNAME,",
+				"          BIRTHYEAR,",
+				"          DEATHYEAR,",
+				"          KNOWNFORTITLES,",
+				"          STARTDATE,",
+				"          ENDDATE,",
+				"          ISCURRENT,",
+				"          TITLEKEY,",
+				"          TCONST = source2@TCONST,",
+				"          TITLETYPE = source2@TITLETYPE,",
+				"          PRIMARYTITLE = source2@PRIMARYTITLE,",
+				"          ORIGINALTITLE = source2@ORIGINALTITLE,",
+				"          ISADULT = source2@ISADULT,",
+				"          STARTYEAR = source2@STARTYEAR,",
+				"          ENDYEAR = source2@ENDYEAR,",
+				"          RUNTIMEMINUTES = source2@RUNTIMEMINUTES,",
+				"          GENRES = source2@GENRES,",
+				"          TCONST = source3@TCONST,",
+				"          TITLETYPE = source3@TITLETYPE,",
+				"          PRIMARYTITLE = source3@PRIMARYTITLE,",
+				"          ORIGINALTITLE = source3@ORIGINALTITLE,",
+				"          ISADULT = source3@ISADULT,",
+				"          STARTYEAR = source3@STARTYEAR,",
+				"          ENDYEAR = source3@ENDYEAR,",
+				"          RUNTIMEMINUTES = source3@RUNTIMEMINUTES,",
+				"          GENRES = source3@GENRES",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"surrogateKey1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          PRINCIPALKEY as decimal(38,0),",
+				"          NAMEKEY as decimal(38,0),",
+				"          TITLEKEY as decimal(38,0),",
+				"          ORDERING as decimal(38,0),",
+				"          PROFESSIONKEY as decimal(38,0),",
+				"          CATEGORY as string,",
+				"          JOB as string,",
+				"          CHARACTERS as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          PRINCIPALKEY = Prinipal_key,",
+				"          NAMEKEY,",
+				"          TITLEKEY,",
+				"          ORDERING = Prinipal_key",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
