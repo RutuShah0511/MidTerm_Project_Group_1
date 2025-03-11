@@ -20,19 +20,33 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "Parquet2",
+						"referenceName": "SnowflakeTable29",
 						"type": "DatasetReference"
 					},
 					"name": "source3"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable30",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "join1"
 				},
 				{
 					"name": "join2"
+				},
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "select2"
 				}
 			],
 			"scriptLines": [
@@ -65,27 +79,85 @@
 				"     validateSchema: false,",
 				"     format: 'table') ~> source2",
 				"source(output(",
-				"          tconst as string,",
-				"          ordering as long,",
-				"          nconst as string,",
-				"          category as string,",
-				"          job as string,",
-				"          characters as string",
+				"          TCONST as string,",
+				"          ORDERING as decimal(38,0),",
+				"          NCONST as string,",
+				"          CATEGORY as string,",
+				"          JOB as string,",
+				"          CHARACTERS as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     format: 'parquet') ~> source3",
-				"source1, source2 join(1 ==1,",
-				"     joinType:'cross',",
+				"     format: 'table') ~> source3",
+				"source1, source2 join(KNOWNFORTITLES == TCONST,",
+				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"join1, source3 join(1==1,",
-				"     joinType:'cross',",
+				"join1, source3 join(source1@NCONST == source3@NCONST,",
+				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join2"
+				"     broadcast: 'auto')~> join2",
+				"select2 keyGenerate(output(PrincipalKey as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"join2 select(mapColumn(",
+				"          NAMEKEY,",
+				"          NCONST = source1@NCONST,",
+				"          PRIMARYNAME,",
+				"          BIRTHYEAR,",
+				"          DEATHYEAR,",
+				"          KNOWNFORTITLES,",
+				"          STARTDATE,",
+				"          ENDDATE,",
+				"          ISCURRENT,",
+				"          TITLEKEY,",
+				"          TCONST = source2@TCONST,",
+				"          TITLETYPE,",
+				"          PRIMARYTITLE,",
+				"          ORIGINALTITLE,",
+				"          ISADULT,",
+				"          STARTYEAR,",
+				"          ENDYEAR,",
+				"          RUNTIMEMINUTES,",
+				"          TCONST = source3@TCONST,",
+				"          ORDERING,",
+				"          NCONST = source3@NCONST,",
+				"          CATEGORY,",
+				"          JOB,",
+				"          CHARACTERS",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"surrogateKey1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          PRINCIPALKEY as decimal(10,0),",
+				"          NAMEKEY as decimal(10,0),",
+				"          TITLEKEY as decimal(10,0),",
+				"          ORDERING as decimal(38,0),",
+				"          CATEGORY as string,",
+				"          JOB as string,",
+				"          CHARACTERS as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          PRINCIPALKEY = PrincipalKey,",
+				"          NAMEKEY,",
+				"          TITLEKEY,",
+				"          ORDERING,",
+				"          CATEGORY,",
+				"          JOB,",
+				"          CHARACTERS",
+				"     )) ~> sink1"
 			]
 		}
 	}

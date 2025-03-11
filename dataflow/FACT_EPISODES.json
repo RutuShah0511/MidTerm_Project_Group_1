@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "Parquet_Episodes",
+						"referenceName": "SnowflakeTable31",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -36,7 +36,7 @@
 					"name": "surrogateKey2"
 				},
 				{
-					"name": "filter1"
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -55,25 +55,39 @@
 				"     validateSchema: false,",
 				"     format: 'table') ~> source1",
 				"source(output(",
-				"          tconst as string,",
-				"          parentTconst as string,",
-				"          seasonNumber as integer,",
-				"          episodeNumber as integer",
+				"          TCONST as string,",
+				"          PARENTTCONST as string,",
+				"          SEASONNUMBER as decimal(38,0),",
+				"          EPISODENUMBER as decimal(38,0)",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     format: 'parquet') ~> source2",
-				"filter1, source2 join(1==1,",
-				"     joinType:'cross',",
+				"     format: 'table') ~> source2",
+				"source1, source2 join(source1@TCONST == source2@TCONST,",
+				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"join1 keyGenerate(output(EpisodeKey as long),",
+				"select1 keyGenerate(output(EpisodeKey as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey2",
-				"source1 filter(TITLEKEY <= 13655500",
-				") ~> filter1",
+				"join1 select(mapColumn(",
+				"          TITLEKEY,",
+				"          TCONST = source1@TCONST,",
+				"          TITLETYPE,",
+				"          PRIMARYTITLE,",
+				"          ORIGINALTITLE,",
+				"          ISADULT,",
+				"          STARTYEAR,",
+				"          ENDYEAR,",
+				"          RUNTIMEMINUTES,",
+				"          TCONST = source2@TCONST,",
+				"          PARENTTCONST,",
+				"          SEASONNUMBER,",
+				"          EPISODENUMBER",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
 				"surrogateKey2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -93,8 +107,8 @@
 				"     mapColumn(",
 				"          EPISODEKEY = EpisodeKey,",
 				"          TITLEKEY,",
-				"          SEASONNUMBER = seasonNumber,",
-				"          EPISODENUMBER = episodeNumber",
+				"          SEASONNUMBER,",
+				"          EPISODENUMBER",
 				"     )) ~> sink1"
 			]
 		}
