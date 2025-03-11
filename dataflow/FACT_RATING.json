@@ -1,19 +1,19 @@
 {
-	"name": "FACT_EPISODES",
+	"name": "FACT_RATING",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable17",
+						"referenceName": "SnowflakeTable32",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
 				},
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable31",
+						"referenceName": "SnowflakeTable33",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable24",
+						"referenceName": "SnowflakeTable34",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -33,7 +33,7 @@
 					"name": "join1"
 				},
 				{
-					"name": "surrogateKey2"
+					"name": "surrogateKey1"
 				},
 				{
 					"name": "select1"
@@ -56,9 +56,8 @@
 				"     format: 'table') ~> source1",
 				"source(output(",
 				"          TCONST as string,",
-				"          PARENTTCONST as string,",
-				"          SEASONNUMBER as decimal(38,0),",
-				"          EPISODENUMBER as decimal(38,0)",
+				"          AVERAGERATING as decimal(3,1),",
+				"          NUMVOTES as decimal(38,0)",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -68,9 +67,9 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"select1 keyGenerate(output(EpisodeKey as long),",
+				"select1 keyGenerate(output(RatingKey as long),",
 				"     startAt: 1L,",
-				"     stepValue: 1L) ~> surrogateKey2",
+				"     stepValue: 1L) ~> surrogateKey1",
 				"join1 select(mapColumn(",
 				"          TITLEKEY,",
 				"          TCONST = source1@TCONST,",
@@ -82,19 +81,18 @@
 				"          ENDYEAR,",
 				"          RUNTIMEMINUTES,",
 				"          TCONST = source2@TCONST,",
-				"          PARENTTCONST,",
-				"          SEASONNUMBER,",
-				"          EPISODENUMBER",
+				"          AVERAGERATING,",
+				"          NUMVOTES",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"surrogateKey2 sink(allowSchemaDrift: true,",
+				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          EPISODEKEY as decimal(10,0),",
+				"          RATINGKEY as decimal(10,0),",
 				"          TITLEKEY as decimal(10,0),",
-				"          SEASONNUMBER as decimal(38,0),",
-				"          EPISODENUMBER as decimal(38,0)",
+				"          AVERAGERATING as double,",
+				"          NUMVOTES as decimal(38,0)",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -105,10 +103,10 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     stageInsert: true,",
 				"     mapColumn(",
-				"          EPISODEKEY = EpisodeKey,",
+				"          RATINGKEY = RatingKey,",
 				"          TITLEKEY,",
-				"          SEASONNUMBER,",
-				"          EPISODENUMBER",
+				"          AVERAGERATING,",
+				"          NUMVOTES",
 				"     )) ~> sink1"
 			]
 		}

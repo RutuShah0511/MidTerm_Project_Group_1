@@ -1,5 +1,5 @@
 {
-	"name": "SnowflakeTable26",
+	"name": "SnowflakeTable40",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Snowflake1",
@@ -9,57 +9,51 @@
 		"type": "SnowflakeV2Table",
 		"schema": [
 			{
+				"name": "PRINCIPALKEY",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
 				"name": "NAMEKEY",
 				"type": "NUMBER",
-				"precision": 10,
+				"precision": 38,
 				"scale": 0
 			},
 			{
-				"name": "NCONST",
+				"name": "TITLEKEY",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "ORDERING",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "PROFESSIONKEY",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "CATEGORY",
 				"type": "VARCHAR"
 			},
 			{
-				"name": "PRIMARYNAME",
+				"name": "JOB",
 				"type": "VARCHAR"
 			},
 			{
-				"name": "BIRTHYEAR",
-				"type": "NUMBER",
-				"precision": 38,
-				"scale": 0
-			},
-			{
-				"name": "DEATHYEAR",
-				"type": "NUMBER",
-				"precision": 38,
-				"scale": 0
-			},
-			{
-				"name": "KNOWNFORTITLES",
+				"name": "CHARACTERS",
 				"type": "VARCHAR"
-			},
-			{
-				"name": "STARTDATE",
-				"type": "NUMBER",
-				"precision": 38,
-				"scale": 0
-			},
-			{
-				"name": "ENDDATE",
-				"type": "NUMBER",
-				"precision": 38,
-				"scale": 0
-			},
-			{
-				"name": "ISCURRENT",
-				"type": "NUMBER",
-				"precision": 38,
-				"scale": 0
 			}
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "DIM_NAME"
+			"table": "FACT_PRINCIPALS"
 		}
 	}
 }

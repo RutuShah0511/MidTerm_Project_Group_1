@@ -1,0 +1,45 @@
+{
+	"name": "SnowflakeTable31",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeiMDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "nconst",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "primaryName",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "birthYear",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "deathYear",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "Profession",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "knownForTitles",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "IMDB_SCHEMA",
+			"table": "NAME_RAW_FLATTENED"
+		}
+	}
+}

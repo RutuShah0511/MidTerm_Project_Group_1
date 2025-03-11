@@ -1,57 +1,53 @@
 {
-	"name": "SnowflakeTable26",
+	"name": "SnowflakeTable37",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Snowflake1",
+			"referenceName": "SnowflakeiMDB",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "SnowflakeV2Table",
 		"schema": [
 			{
-				"name": "NAMEKEY",
+				"name": "TITLEKEY",
 				"type": "NUMBER",
 				"precision": 10,
 				"scale": 0
 			},
 			{
-				"name": "NCONST",
+				"name": "TCONST",
 				"type": "VARCHAR"
 			},
 			{
-				"name": "PRIMARYNAME",
+				"name": "TITLETYPE",
 				"type": "VARCHAR"
 			},
 			{
-				"name": "BIRTHYEAR",
-				"type": "NUMBER",
-				"precision": 38,
-				"scale": 0
-			},
-			{
-				"name": "DEATHYEAR",
-				"type": "NUMBER",
-				"precision": 38,
-				"scale": 0
-			},
-			{
-				"name": "KNOWNFORTITLES",
+				"name": "PRIMARYTITLE",
 				"type": "VARCHAR"
 			},
 			{
-				"name": "STARTDATE",
+				"name": "ORIGINALTITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ISADULT",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "STARTYEAR",
 				"type": "NUMBER",
 				"precision": 38,
 				"scale": 0
 			},
 			{
-				"name": "ENDDATE",
+				"name": "ENDYEAR",
 				"type": "NUMBER",
 				"precision": 38,
 				"scale": 0
 			},
 			{
-				"name": "ISCURRENT",
+				"name": "RUNTIMEMINUTES",
 				"type": "NUMBER",
 				"precision": 38,
 				"scale": 0
@@ -59,7 +55,7 @@
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "DIM_NAME"
+			"table": "DIM_REGION"
 		}
 	}
 }

@@ -1,0 +1,33 @@
+{
+	"name": "SnowflakeTable_Ratings",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeiMDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TCONST",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "AVERAGERATING",
+				"type": "NUMBER",
+				"precision": 3,
+				"scale": 1
+			},
+			{
+				"name": "NUMVOTES",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "IMDB_SCHEMA",
+			"table": "STAGE_RATINGS"
+		}
+	}
+}
