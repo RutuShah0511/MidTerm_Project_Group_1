@@ -21,7 +21,7 @@
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "DIM_GENRE"
+			"table": "DIM_TITLE"
 		}
 	}
 }
