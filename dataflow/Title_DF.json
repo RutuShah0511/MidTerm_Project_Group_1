@@ -63,7 +63,8 @@
 				"          STARTYEAR,",
 				"          ENDYEAR,",
 				"          RUNTIMEMINUTES,",
-				"          TITLEKEY = TitleKey",
+				"          TITLEKEY = TitleKey,",
+				"          GENRES",
 				"     )) ~> sink1"
 			]
 		}
