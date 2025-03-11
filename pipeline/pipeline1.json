@@ -265,6 +265,8 @@
 			{
 				"name": "Fact_Principal",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -280,8 +282,8 @@
 						"type": "DataFlowReference"
 					},
 					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
+						"coreCount": 32,
+						"computeType": "MemoryOptimized"
 					},
 					"traceLevel": "Fine"
 				}
@@ -401,6 +403,93 @@
 				"outputs": [
 					{
 						"referenceName": "SnowflakeTable29",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "ParquetReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "linkedService2",
+							"type": "LinkedServiceReference"
+						},
+						"path": "silver"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "tconst",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TCONST",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "averageRating",
+									"type": "Single"
+								},
+								"sink": {
+									"name": "AVERAGERATING",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "numVotes",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "NUMVOTES",
+									"type": "Int64"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Parquet4",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SnowflakeTable_Ratings",
 						"type": "DatasetReference"
 					}
 				]
