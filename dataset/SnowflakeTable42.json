@@ -53,7 +53,7 @@
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "TITLE_RAW_FLATTENED"
+			"table": "STAGE_PRINCIPAL"
 		}
 	}
 }

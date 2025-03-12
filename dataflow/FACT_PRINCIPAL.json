@@ -6,28 +6,35 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable26",
+						"referenceName": "SnowflakeTable42",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
 				},
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable27",
+						"referenceName": "SnowflakeTable26",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
 				},
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable42",
+						"referenceName": "SnowflakeTable27",
 						"type": "DatasetReference"
 					},
 					"name": "source3"
 				},
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable29",
+						"referenceName": "SnowflakeTable40",
+						"type": "DatasetReference"
+					},
+					"name": "FCTPRINCIPAL"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable43",
 						"type": "DatasetReference"
 					},
 					"name": "source4"
@@ -53,20 +60,26 @@
 					"name": "surrogateKey1"
 				},
 				{
-					"name": "select1"
+					"name": "join3"
+				},
+				{
+					"name": "join4"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          NAMEKEY as decimal(10,0),",
+				"          TCONST as string,",
+				"          ORDERING as decimal(38,0),",
 				"          NCONST as string,",
-				"          PRIMARYNAME as string,",
-				"          BIRTHYEAR as decimal(38,0),",
-				"          DEATHYEAR as decimal(38,0),",
-				"          KNOWNFORTITLES as string,",
-				"          STARTDATE as decimal(38,0),",
-				"          ENDDATE as decimal(38,0),",
-				"          ISCURRENT as decimal(38,0)",
+				"          CATEGORY as string,",
+				"          JOB as string,",
+				"          CHARACTERS as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -87,19 +100,26 @@
 				"     validateSchema: false,",
 				"     format: 'table') ~> source2",
 				"source(output(",
-				"          TCONST as string,",
-				"          TITLETYPE as string,",
-				"          PRIMARYTITLE as string,",
-				"          ORIGINALTITLE as string,",
-				"          ISADULT as boolean,",
-				"          STARTYEAR as decimal(38,0),",
-				"          ENDYEAR as decimal(38,0),",
-				"          RUNTIMEMINUTES as decimal(38,0),",
-				"          GENRES as string",
+				"          NAMEKEY as decimal(10,0),",
+				"          NCONST as string,",
+				"          PRIMARYNAME as string,",
+				"          BIRTHYEAR as decimal(38,0),",
+				"          DEATHYEAR as decimal(38,0),",
+				"          KNOWNFORTITLES as string,",
+				"          STARTDATE as decimal(38,0),",
+				"          ENDDATE as decimal(38,0),",
+				"          ISCURRENT as decimal(38,0)",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'table') ~> source3",
+				"source(output(",
+				"          PRINCIPALSK as decimal(38,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     query: 'SELECT NVL(MAX(PRINCIPALKEY),0) AS PRINCIPALSK FROM FACT_PRINCIPALS',",
+				"     format: 'query') ~> FCTPRINCIPAL",
 				"source(output(",
 				"          PROFESSIONKEY as decimal(38,0),",
 				"          PROFESSIONNAME as string",
@@ -107,52 +127,37 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'table') ~> source4",
-				"source1, source2 join(KNOWNFORTITLES == TCONST,",
+				"source1, source2 join(source1@TCONST == source2@TCONST,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"join1, source3 join(source2@TCONST == source3@TCONST,",
+				"join1, source3 join(source1@NCONST == source3@NCONST,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join2",
-				"select1 keyGenerate(output(Prinipal_key as long),",
+				"aggregate1 keyGenerate(output(RowNum as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey1",
-				"join2 select(mapColumn(",
-				"          NAMEKEY,",
-				"          NCONST,",
-				"          PRIMARYNAME,",
-				"          BIRTHYEAR,",
-				"          DEATHYEAR,",
-				"          KNOWNFORTITLES,",
-				"          STARTDATE,",
-				"          ENDDATE,",
-				"          ISCURRENT,",
-				"          TITLEKEY,",
-				"          TCONST = source2@TCONST,",
-				"          TITLETYPE = source2@TITLETYPE,",
-				"          PRIMARYTITLE = source2@PRIMARYTITLE,",
-				"          ORIGINALTITLE = source2@ORIGINALTITLE,",
-				"          ISADULT = source2@ISADULT,",
-				"          STARTYEAR = source2@STARTYEAR,",
-				"          ENDYEAR = source2@ENDYEAR,",
-				"          RUNTIMEMINUTES = source2@RUNTIMEMINUTES,",
-				"          GENRES = source2@GENRES,",
-				"          TCONST = source3@TCONST,",
-				"          TITLETYPE = source3@TITLETYPE,",
-				"          PRIMARYTITLE = source3@PRIMARYTITLE,",
-				"          ORIGINALTITLE = source3@ORIGINALTITLE,",
-				"          ISADULT = source3@ISADULT,",
-				"          STARTYEAR = source3@STARTYEAR,",
-				"          ENDYEAR = source3@ENDYEAR,",
-				"          RUNTIMEMINUTES = source3@RUNTIMEMINUTES,",
-				"          GENRES = source3@GENRES",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"surrogateKey1 sink(allowSchemaDrift: true,",
+				"join2, source4 join(ERROR_FUNCTION('') == PROFESSIONKEY,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3, FCTPRINCIPAL join(1==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join4",
+				"join4 aggregate(groupBy(source1@TCONST,",
+				"          ORDERING,",
+				"          CATEGORY,",
+				"          JOB,",
+				"          CHARACTERS),",
+				"     Count = count(TITLEKEY)) ~> aggregate1",
+				"surrogateKey1 derive() ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          PRINCIPALKEY as decimal(38,0),",
@@ -173,10 +178,10 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     stageInsert: true,",
 				"     mapColumn(",
-				"          PRINCIPALKEY = Prinipal_key,",
+				"          PRINCIPALKEY = RowNum,",
 				"          NAMEKEY,",
 				"          TITLEKEY,",
-				"          ORDERING = Prinipal_key",
+				"          ORDERING = RowNum",
 				"     )) ~> sink1"
 			]
 		}
