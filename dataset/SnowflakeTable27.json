@@ -2,7 +2,7 @@
 	"name": "SnowflakeTable27",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Snowflake1",
+			"referenceName": "Snowflake2",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -55,7 +55,7 @@
 		],
 		"typeProperties": {
 			"schema": "IMDB_SCHEMA",
-			"table": "DIM_TITLE"
+			"table": "DIM_NAME"
 		}
 	}
 }
